@@ -1,0 +1,15 @@
+{
+  "name": "media-downloader-web",
+  "version": "1.0.0",
+  "description": "Full-stack YouTube, TikTok, and Instagram Video & Audio Downloader",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "setup-tools": "node scripts/setup-tools.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

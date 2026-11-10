@@ -1,0 +1,164 @@
+/* ==========================================================
+   MediaHub — Premium UI Styling & Micro-Interactions
+   ========================================================== */
+
+:root {
+  --bg-dark: #070a13;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --bg-card-hover: rgba(22, 34, 62, 0.85);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(99, 102, 241, 0.45);
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+  --accent-cyan: #06b6d4;
+  --accent-pink: #f43f5e;
+  --accent-emerald: #10b981;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 10% 5%, rgba(99, 102, 241, 0.16) 0px, transparent 45%),
+    radial-gradient(at 90% 15%, rgba(236, 72, 153, 0.12) 0px, transparent 45%),
+    radial-gradient(at 50% 90%, rgba(14, 165, 233, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Cards */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Platform Filter Tabs */
+.platform-tab {
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.platform-tab.active {
+  background: rgba(99, 102, 241, 0.18);
+  color: #fff;
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+/* Radio Format Card styling with Checkmark & Glow */
+.format-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(11, 17, 33, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+.format-card:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.format-card .check-circle {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.format-card:has(input[type="radio"]:checked) {
+  border-color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.16);
+  box-shadow: 0 0 25px -4px rgba(99, 102, 241, 0.35);
+}
+
+.format-card:has(input[type="radio"]:checked) .check-circle {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Shimmer Animation on Progress Bar */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.8s infinite;
+}
+
+/* Platform-Specific Badges */
+.badge-youtube {
+  background: #ef4444 !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.badge-tiktok {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #ff0844 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+}
+
+.badge-instagram {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px rgba(220, 39, 67, 0.4);
+}
+
+.badge-generic {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  color: #fff !important;
+}
+
+/* Accordion FAQ */
+details summary::-webkit-details-marker {
+  display: none;
+}
+details[open] summary .faq-icon {
+  transform: rotate(180deg);
+}
+.faq-icon {
+  transition: transform 0.25s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #070a13;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}

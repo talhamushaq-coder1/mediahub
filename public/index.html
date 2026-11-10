@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediaHub — Universal High-Speed Video & Audio Downloader</title>
+  
+  <!-- Brand Favicon -->
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#070a13] text-slate-100 min-h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
+
+  <!-- Top Navigation Header -->
+  <header class="border-b border-slate-800/80 backdrop-blur-xl bg-[#070a13]/80 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo & Name -->
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-200">
+          <img src="logo.svg" alt="MediaHub Logo" class="w-full h-full object-cover">
+        </div>
+        <div class="flex items-center">
+          <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-200 bg-clip-text text-transparent">MediaHub</span>
+          <span class="text-[10px] px-2 py-0.5 ml-2 rounded-full font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">PRO</span>
+        </div>
+      </a>
+
+      <!-- Engine Status Indicator -->
+      <div id="system-status" class="flex items-center space-x-2 text-xs px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 text-slate-300 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="status-dot"></span>
+        <span id="status-text" class="font-medium">Turbo 8x Engine Active</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    
+    <!-- Hero Header -->
+    <div class="text-center space-y-3.5 mb-8">
+      <div class="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-pink-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold tracking-wide shadow-inner">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i>
+        <span>Multi-Platform Media Downloader</span>
+      </div>
+      
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Download Any Video in Seconds
+      </h1>
+      
+      <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+        High-definition downloads from <span class="text-red-400 font-semibold">YouTube</span>, <span class="text-cyan-400 font-semibold">TikTok</span> (without watermarks), and <span class="text-pink-400 font-semibold">Instagram</span> with 8-channel stream acceleration.
+      </p>
+    </div>
+
+    <!-- Platform Selector Tabs -->
+    <div class="flex items-center justify-center gap-2 mb-4 overflow-x-auto pb-1" id="platform-tabs">
+      <button class="platform-tab active px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white flex items-center space-x-1.5" data-filter="all">
+        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+        <span>All Links</span>
+      </button>
+      <button class="platform-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white flex items-center space-x-1.5" data-filter="youtube">
+        <i data-lucide="youtube" class="w-3.5 h-3.5 text-red-500"></i>
+        <span>YouTube</span>
+      </button>
+      <button class="platform-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white flex items-center space-x-1.5" data-filter="tiktok">
+        <i data-lucide="music-2" class="w-3.5 h-3.5 text-cyan-400"></i>
+        <span>TikTok</span>
+      </button>
+      <button class="platform-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white flex items-center space-x-1.5" data-filter="instagram">
+        <i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-500"></i>
+        <span>Instagram</span>
+      </button>
+      <button class="platform-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white flex items-center space-x-1.5" data-filter="more">
+        <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-400"></i>
+        <span>Twitter / FB</span>
+      </button>
+    </div>
+
+    <!-- Search / URL Input Card -->
+    <div class="glass-panel p-3 sm:p-4 rounded-2xl relative mb-6">
+      <form id="fetch-form" class="flex flex-col sm:flex-row gap-2.5">
+        <div class="relative flex-1">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+            <i data-lucide="link-2" class="w-5 h-5"></i>
+          </div>
+          <input 
+            type="url" 
+            id="url-input" 
+            placeholder="Paste YouTube, TikTok or Instagram link here..." 
+            required
+            autocomplete="off"
+            class="w-full pl-11 pr-24 py-3.5 bg-slate-950/90 rounded-xl border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/25 text-slate-100 placeholder-slate-500 text-sm outline-none transition-all"
+          >
+          <button 
+            type="button" 
+            id="paste-btn" 
+            class="absolute inset-y-1.5 right-1.5 px-3 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium flex items-center space-x-1.5 transition-all">
+            <i data-lucide="clipboard" class="w-3.5 h-3.5"></i>
+            <span>Paste</span>
+          </button>
+        </div>
+
+        <button 
+          type="submit" 
+          id="fetch-btn" 
+          class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 font-bold text-white text-sm flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/30 transition-all active:scale-[0.98]">
+          <span id="fetch-btn-text">Get Video</span>
+          <i data-lucide="arrow-right" class="w-4 h-4" id="fetch-btn-icon"></i>
+          <span id="fetch-spinner" class="hidden animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+        </button>
+      </form>
+
+      <!-- URL Auto Detection Tag -->
+      <div id="detected-platform-bar" class="hidden mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs px-2 text-slate-400">
+        <span class="flex items-center space-x-2">
+          <span>Detected:</span>
+          <span id="detected-platform-pill" class="font-bold px-2.5 py-0.5 rounded text-white bg-slate-800">YouTube</span>
+          <span class="text-[11px] text-emerald-400 font-medium">● Auto-inspecting...</span>
+        </span>
+        <button id="clear-input-btn" class="hover:text-slate-200 transition">Clear</button>
+      </div>
+    </div>
+
+    <!-- Error Alert Box -->
+    <div id="error-box" class="hidden mb-6 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 text-sm flex items-start space-x-3">
+      <i data-lucide="alert-circle" class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"></i>
+      <div class="flex-1">
+        <h4 class="font-semibold text-red-200" id="error-title">Notice</h4>
+        <p class="text-xs text-red-300/80 mt-1" id="error-message">Unable to fetch details from this link.</p>
+      </div>
+      <button onclick="document.getElementById('error-box').classList.add('hidden')" class="text-red-400 hover:text-red-200">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Media Preview & Format Card -->
+    <div id="preview-card" class="hidden glass-panel rounded-2xl p-5 sm:p-6 mb-8 transition-all">
+      <div class="flex flex-col md:flex-row gap-6 items-start">
+        
+        <!-- Thumbnail -->
+        <div class="relative w-full md:w-64 aspect-video rounded-xl overflow-hidden bg-slate-950 flex-shrink-0 border border-slate-800 shadow-md">
+          <img id="media-thumb" src="" alt="Thumbnail" class="w-full h-full object-cover">
+          <span id="media-duration" class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/85 text-white text-[11px] font-mono font-medium backdrop-blur-sm">
+            00:00
+          </span>
+          <span id="media-badge" class="absolute top-2 left-2 px-2.5 py-0.5 rounded text-[10px] font-bold text-white uppercase tracking-wider bg-red-600">
+            YouTube
+          </span>
+        </div>
+
+        <!-- Info & Format Controls -->
+        <div class="flex-1 w-full space-y-4">
+          <div>
+            <h3 id="media-title" class="text-lg font-bold text-white line-clamp-2 leading-snug">
+              Video Title Here
+            </h3>
+            <p id="media-author" class="text-xs text-slate-400 mt-1 flex items-center space-x-1.5">
+              <i data-lucide="user" class="w-3.5 h-3.5 text-slate-500"></i>
+              <span>Channel / Creator</span>
+            </p>
+          </div>
+
+          <!-- Format Chooser -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Choose Resolution / Format</label>
+              <span class="text-[11px] text-emerald-400 font-semibold flex items-center space-x-1">
+                <i data-lucide="zap" class="w-3 h-3"></i>
+                <span>Turbo 8x Channels Active</span>
+              </span>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="format-options">
+              
+              <!-- Ultra Fast 720p -->
+              <label class="format-card relative flex items-center p-3 rounded-xl cursor-pointer">
+                <input type="radio" name="download-format" value="fast-video" data-type="video" checked class="hidden peer">
+                <div class="w-full flex items-center space-x-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs font-bold text-white flex items-center justify-between">
+                      <span>Fast MP4</span>
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-indigo-400 check-circle"></i>
+                    </div>
+                    <div class="text-[10px] text-slate-400">Direct Progressive (720p)</div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Turbo 1080p -->
+              <label class="format-card relative flex items-center p-3 rounded-xl cursor-pointer">
+                <input type="radio" name="download-format" value="best-video" data-type="video" class="hidden peer">
+                <div class="w-full flex items-center space-x-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="film" class="w-4 h-4"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs font-bold text-white flex items-center justify-between">
+                      <span>Turbo 1080p</span>
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-indigo-400 check-circle"></i>
+                    </div>
+                    <div class="text-[10px] text-slate-400">8x Multi-Chunk (Full HD)</div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Audio Only -->
+              <label class="format-card relative flex items-center p-3 rounded-xl cursor-pointer">
+                <input type="radio" name="download-format" value="best-audio" data-type="audio" class="hidden peer">
+                <div class="w-full flex items-center space-x-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="music" class="w-4 h-4"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs font-bold text-white flex items-center justify-between">
+                      <span>Audio MP3</span>
+                      <i data-lucide="check" class="w-3.5 h-3.5 text-indigo-400 check-circle"></i>
+                    </div>
+                    <div class="text-[10px] text-slate-400">320kbps High Fidelity</div>
+                  </div>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+            <button 
+              id="start-download-btn" 
+              class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 font-bold text-white text-sm flex items-center justify-center space-x-2 shadow-lg shadow-teal-500/25 transition-all active:scale-[0.99]">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Download Video</span>
+            </button>
+            <button 
+              id="direct-stream-btn" 
+              class="px-4 py-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center justify-center space-x-2 border border-slate-700 transition-all"
+              title="Streams directly into your browser's download manager">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              <span>Instant Browser Stream</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Download Progress Section -->
+      <div id="progress-container" class="hidden mt-6 pt-5 border-t border-slate-800/80 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-medium text-slate-300 flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="progress-status-label">Downloading 8 parallel streams...</span>
+          </span>
+          <div class="flex items-center space-x-3 text-slate-400 font-mono text-[11px]">
+            <span id="progress-speed" class="text-emerald-400 font-bold">-- MB/s</span>
+            <span id="progress-eta">ETA: --</span>
+            <span id="progress-percent" class="font-extrabold text-white text-xs">0%</span>
+          </div>
+        </div>
+
+        <!-- Shimmer Progress Bar -->
+        <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800 shimmer-bar">
+          <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-indigo-500 via-teal-400 to-emerald-400 transition-all duration-200 w-0"></div>
+        </div>
+
+        <!-- Direct Save Trigger -->
+        <div id="download-ready-box" class="hidden flex items-center justify-between p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs mt-3">
+          <div class="flex items-center space-x-2">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span>File prepared! If the download didn't auto-start, click Save:</span>
+          </div>
+          <a id="save-file-link" href="#" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition">
+            Save File
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Pillars -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-10">
+      <div class="p-4 rounded-xl border border-slate-800/80 bg-slate-900/40 space-y-1.5">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">8x Turbo Threads</h4>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Concurrent fragment chunking maximizes your full broadband bandwidth without arbitrary throttling.
+        </p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-slate-800/80 bg-slate-900/40 space-y-1.5">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Watermark-Free</h4>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          TikTok videos and Instagram Reels are extracted directly from origin CDNs without annoying overlays.
+        </p>
+      </div>
+
+      <div class="p-4 rounded-xl border border-slate-800/80 bg-slate-900/40 space-y-1.5">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">Clean & Unlimited</h4>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Zero ads, no software installation, and no rate limits. Your files stay private on your local machine.
+        </p>
+      </div>
+    </div>
+
+    <!-- Recent Downloads History -->
+    <div id="history-section" class="hidden mb-10">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-2">
+          <i data-lucide="history" class="w-3.5 h-3.5 text-slate-400"></i>
+          <span>Recent Downloads</span>
+        </h3>
+        <button id="clear-history-btn" class="text-xs text-slate-500 hover:text-slate-300 transition">
+          Clear History
+        </button>
+      </div>
+      <div id="history-list" class="space-y-2"></div>
+    </div>
+
+    <!-- Frequently Asked Questions Accordion -->
+    <div class="glass-panel p-5 rounded-2xl mb-10 space-y-3">
+      <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2 flex items-center space-x-2">
+        <i data-lucide="help-circle" class="w-4 h-4 text-indigo-400"></i>
+        <span>Frequently Asked Questions</span>
+      </h3>
+
+      <details class="group border border-slate-800 rounded-xl p-3 cursor-pointer bg-slate-950/40">
+        <summary class="flex items-center justify-between text-xs font-semibold text-slate-200 list-none">
+          <span>How does MediaHub download TikTok videos without watermarks?</span>
+          <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon"></i>
+        </summary>
+        <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
+          MediaHub extracts the direct video CDN stream prior to the watermark overlay applied by the TikTok web player, providing the original high-resolution MP4.
+        </p>
+      </details>
+
+      <details class="group border border-slate-800 rounded-xl p-3 cursor-pointer bg-slate-950/40">
+        <summary class="flex items-center justify-between text-xs font-semibold text-slate-200 list-none">
+          <span>Why is MediaHub's download speed so fast?</span>
+          <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon"></i>
+        </summary>
+        <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
+          MediaHub leverages 8 concurrent fragment download channels in parallel and utilizes native rate-bypass parameters, circumventing standard YouTube 50KB/s web throttling.
+        </p>
+      </details>
+
+      <details class="group border border-slate-800 rounded-xl p-3 cursor-pointer bg-slate-950/40">
+        <summary class="flex items-center justify-between text-xs font-semibold text-slate-200 list-none">
+          <span>Can I extract MP3 audio only?</span>
+          <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 faq-icon"></i>
+        </summary>
+        <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
+          Yes! Select the "Audio MP3" option on any supported video to extract and download a clean, high-bitrate MP3 audio file.
+        </p>
+      </details>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-2">
+        <img src="logo.svg" alt="Logo" class="w-5 h-5 rounded">
+        <span class="font-bold text-slate-300">MediaHub</span>
+        <span>— High Performance Media Downloader</span>
+      </div>
+      <p class="text-[11px] text-slate-500">For personal and fair-use offline archival only. Respect creators' copyrights.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
